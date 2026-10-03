@@ -103,7 +103,7 @@ function TriggerRow({ icon, title, sub, to, checked, onChange }: {
       <div className="rounded-xl bg-secondary p-2.5 text-primary [&_svg]:size-5">{icon}</div>
       <Link to={to} className="min-w-0 flex-1">
         <p className="font-medium">{title}</p>
-        <p className="truncate text-xs capitalize-first text-muted-foreground">{sub}</p>
+        <p className="truncate text-xs text-muted-foreground">{sub}</p>
       </Link>
       {onChange ? <Switch checked={!!checked} onCheckedChange={onChange} aria-label={`Toggle ${title}`} /> : <ChevronRight className="size-4 text-muted-foreground" />}
     </div>
