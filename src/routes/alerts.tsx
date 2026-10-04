@@ -124,7 +124,7 @@ function AlertsPage() {
             <div className="pt-3">
               <div className="flex justify-between"><Label>Stop automatically after</Label><span className="text-sm font-semibold">{Math.round(alert.maxDurationSec / 60 * 10) / 10} min</span></div>
               <Slider className="mt-3" min={LIMITS.maxDurationSec.min} max={LIMITS.maxDurationSec.max} step={15} value={[alert.maxDurationSec]}
-                onValueChange={([v]) => set({ maxDurationSec: v })} aria-label="Maximum duration" />
+                onValueChange={([v]) => set({ maxDurationSec: v ?? alert.maxDurationSec })} aria-label="Maximum duration" />
             </div>
             <FieldError msg={errs.stop} />
           </Panel>

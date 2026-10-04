@@ -82,5 +82,5 @@ export interface TriggerEvent {
   result: TriggerResult;
   secureChallenge: boolean;
   detail: string;
-  durationMs?: number;
+  durationMs?: number | undefined;
 }
