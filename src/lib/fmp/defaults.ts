@@ -27,7 +27,7 @@ export const DEFAULT_CONFIG: FmpConfig = {
   },
   voice: {
     enabled: false,
-    phrase: "where is my phone",
+    phrase: "Trent’s phone, locate yourself",
     sensitivity: 50,
     sample: null,
   },

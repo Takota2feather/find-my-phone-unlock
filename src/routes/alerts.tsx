@@ -48,7 +48,7 @@ function AlertsPage() {
     if (patch.combined) { next.alarmEnabled = true; next.flashlightEnabled = true; }
     if (patch.alarmEnabled === false || patch.flashlightEnabled === false) next.combined = false;
     const e = validateAlert(next);
-    if (e.outputs || e.stop) return toast.error(e.outputs ?? e.stop!);
+    if (e.outputs || e.stop) { toast.error(e.outputs ?? e.stop!); return; }
     updateSection("alert", next);
   };
 
@@ -86,7 +86,7 @@ function AlertsPage() {
             </div>
             <div className="pt-5">
               <div className="flex justify-between"><Label>Volume</Label><span className="text-sm font-semibold">{alert.volume}%</span></div>
-              <Slider className="mt-3" min={10} max={100} step={5} value={[alert.volume]} onValueChange={([v]) => set({ volume: v })} disabled={!alert.alarmEnabled} aria-label="Volume" />
+              <Slider className="mt-3" min={10} max={100} step={5} value={[alert.volume]} onValueChange={([v]) => set({ volume: v ?? alert.volume })} disabled={!alert.alarmEnabled} aria-label="Volume" />
             </div>
             <SettingRow id="ramp" label="Gradually get louder" checked={alert.rampUp} onChange={(v) => set({ rampUp: v })} disabled={!alert.alarmEnabled}
               hint="Starts quiet and reaches full volume over a few seconds." />
@@ -108,7 +108,7 @@ function AlertsPage() {
               <div className="pt-5">
                 <div className="flex justify-between"><Label>Blink interval</Label><span className="text-sm font-semibold">{alert.blinkIntervalMs} ms</span></div>
                 <Slider className="mt-3" min={LIMITS.blinkIntervalMs.min} max={LIMITS.blinkIntervalMs.max} step={50} value={[alert.blinkIntervalMs]}
-                  onValueChange={([v]) => set({ blinkIntervalMs: v })} disabled={!alert.flashlightEnabled} aria-label="Blink interval" />
+                  onValueChange={([v]) => set({ blinkIntervalMs: v ?? alert.blinkIntervalMs })} disabled={!alert.flashlightEnabled} aria-label="Blink interval" />
               </div>
             )}
             <SettingRow id="combined" label="Alarm + flashlight together" checked={alert.combined} onChange={(v) => set({ combined: v })}
@@ -124,7 +124,7 @@ function AlertsPage() {
             <div className="pt-3">
               <div className="flex justify-between"><Label>Stop automatically after</Label><span className="text-sm font-semibold">{Math.round(alert.maxDurationSec / 60 * 10) / 10} min</span></div>
               <Slider className="mt-3" min={LIMITS.maxDurationSec.min} max={LIMITS.maxDurationSec.max} step={15} value={[alert.maxDurationSec]}
-                onValueChange={([v]) => set({ maxDurationSec: v })} aria-label="Maximum duration" />
+                onValueChange={([v]) => set({ maxDurationSec: v ?? alert.maxDurationSec })} aria-label="Maximum duration" />
             </div>
             <FieldError msg={errs.stop} />
           </Panel>

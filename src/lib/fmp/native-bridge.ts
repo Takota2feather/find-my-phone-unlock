@@ -84,7 +84,7 @@ class WebSimulationBridge implements NativeBridge {
     emit(IDLE);
     if (!silent && was.active && was.source) {
       const label = { manual: "Stopped manually", unlock: "Stopped: phone unlocked (simulated)", timeout: "Stopped: preview time limit" }[reason];
-      addEvent({ source: was.source, result: "stopped", secureChallenge: false, detail: label });
+      addEvent({ source: was.source, result: "stopped", secureChallenge: false, detail: label, durationMs: was.startedAt ? Date.now() - was.startedAt : undefined });
     }
   }
 }

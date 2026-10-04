@@ -31,7 +31,7 @@ export function playAlarmPreview(sound: AlarmSound, volume: number, rampUp: bool
   let i = 0;
   const patterns: Record<AlarmSound, [number, () => void]> = {
     beacon: [500, () => note(i++ % 2 ? 0 + 1046 : 880, 0.18, "square")],
-    chime: [450, () => note([659, 784, 988][i++ % 3], 0.4, "sine")],
+    chime: [450, () => note([659, 784, 988][i++ % 3] ?? 659, 0.4, "sine")],
     siren: [900, () => note(i++ % 2 ? 1200 : 600, 0.9, "sawtooth", i % 2 ? 600 : 1200)],
     pulse: [350, () => note(440, 0.12, "triangle")],
   };

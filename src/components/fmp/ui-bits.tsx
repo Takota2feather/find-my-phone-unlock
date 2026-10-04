@@ -70,7 +70,7 @@ export function InlineHint({ children, tone = "muted" }: { children: React.React
   );
 }
 
-export function FieldError({ msg }: { msg?: string }) {
+export function FieldError({ msg }: { msg?: string | undefined }) {
   if (!msg) return null;
   return <p role="alert" className="mt-1.5 text-xs font-medium text-destructive">{msg}</p>;
 }
