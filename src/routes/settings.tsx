@@ -1,5 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useRef } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Download, RotateCcw, Smartphone, Upload, Wrench } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/fmp/AppShell";
@@ -10,7 +12,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { exportState, importState, resetAll, updateSection } from "@/lib/fmp/store";
+import { exportState, importState, resetAll, updateSection, useConfig } from "@/lib/fmp/store";
 import { bridge } from "@/lib/fmp/native-bridge";
 
 export const Route = createFileRoute("/settings")({
@@ -34,6 +36,14 @@ function SettingsPage() {
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
   const caps = bridge.capabilities();
+  const config = useConfig();
+  const [name, setName] = useState(config.device.name);
+  const saveName = () => {
+    const n = name.trim();
+    if (n.length < 1 || n.length > 40) { toast.error("Use 1 to 40 characters."); return; }
+    updateSection("device", { name: n });
+    toast.success("Device name saved.");
+  };
 
   const doExport = () => {
     const blob = new Blob([exportState()], { type: "application/json" });
@@ -53,6 +63,27 @@ function SettingsPage() {
     <AppShell>
       <PageHeader title="Settings" />
       <div className="grid gap-5 lg:grid-cols-2">
+        <Panel title="Device" icon={<Smartphone />} description="Shown on the dashboard and in the Android companion.">
+          <Label htmlFor="dname">Device name</Label>
+          <div className="mt-1.5 flex gap-2">
+            <Input id="dname" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
+            <Button onClick={saveName}>Save</Button>
+          </div>
+        </Panel>
+        <Panel title="Triggers, security & alert" icon={<Wrench />}>
+          <ul className="space-y-2 text-sm">
+            <li className="flex justify-between"><span>SMS trigger</span><span className="text-muted-foreground">{config.sms.enabled ? (config.sms.contextAware ? "Context-aware" : "Exact phrase") : "Off"}</span></li>
+            <li className="flex justify-between"><span>Password challenge</span><span className="text-muted-foreground">{config.sms.secureMode ? `On · ${config.sms.maxAttempts} attempts · ${config.sms.timeoutSec}s` : "Off"}</span></li>
+            <li className="flex justify-between"><span>Voice trigger</span><span className="text-muted-foreground">{config.voice.enabled ? "On" : "Off"}</span></li>
+            <li className="flex justify-between"><span>Alert</span><span className="text-muted-foreground">{[config.alert.alarmEnabled && "Alarm", config.alert.flashlightEnabled && "Flashlight"].filter(Boolean).join(" + ")}</span></li>
+          </ul>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button asChild variant="soft" size="sm"><Link to="/sms">SMS & security</Link></Button>
+            <Button asChild variant="soft" size="sm"><Link to="/voice">Voice</Link></Button>
+            <Button asChild variant="soft" size="sm"><Link to="/alerts">Alert</Link></Button>
+            <Button asChild variant="soft" size="sm"><Link to="/setup">Permissions</Link></Button>
+          </div>
+        </Panel>
         <Panel title="Android companion" icon={<Smartphone />} action={<StatusBadge tone={bridge.connected ? "success" : "info"} dot>{bridge.connected ? "Connected" : "Web simulation"}</StatusBadge>}>
           <p className="mb-3 text-sm text-muted-foreground">Device features available right now:</p>
           <ul className="grid grid-cols-2 gap-2">
