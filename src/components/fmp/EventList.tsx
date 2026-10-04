@@ -25,6 +25,7 @@ export function EventList({ events, compact }: { events: TriggerEvent[]; compact
                 <span className="text-sm font-medium">{S.label}</span>
                 <StatusBadge tone={r.tone}>{r.label}</StatusBadge>
                 {e.secureChallenge && <StatusBadge tone="warning"><KeyRound className="size-3" /> Challenge</StatusBadge>}
+                {e.durationMs != null && <span className="text-xs text-muted-foreground">{Math.round(e.durationMs / 1000)}s</span>}
               </div>
               {!compact && <p className="mt-1 text-xs text-muted-foreground">{e.detail}</p>}
             </div>

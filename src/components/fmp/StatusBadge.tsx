@@ -39,10 +39,10 @@ export function StatusBadge({
 
 export const RESULT_META: Record<TriggerResult, { label: string; tone: Tone }> = {
   activated: { label: "Activated", tone: "success" },
-  simulated: { label: "Simulated", tone: "info" },
+  simulated: { label: "Test", tone: "info" },
   challenge_sent: { label: "Challenge sent", tone: "warning" },
-  rejected: { label: "Rejected", tone: "danger" },
-  ignored: { label: "Ignored", tone: "muted" },
+  rejected: { label: "Failed password", tone: "danger" },
+  ignored: { label: "Blocked", tone: "muted" },
   expired: { label: "Expired", tone: "warning" },
   stopped: { label: "Stopped", tone: "muted" },
 };

@@ -1,7 +1,8 @@
 import { LIMITS } from "./defaults";
 import type { SmsConfig, VoiceConfig, AlertConfig } from "./types";
 
-export type Errors = Partial<Record<string, string>>;
+export type ErrKey = "phrase" | "password" | "challengeReply" | "timeoutSec" | "maxAttempts" | "sample" | "outputs" | "stop" | "blinkIntervalMs" | "maxDurationSec";
+export type Errors = Partial<Record<ErrKey, string>>;
 
 export function normalizePhrase(s: string) {
   return s.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
