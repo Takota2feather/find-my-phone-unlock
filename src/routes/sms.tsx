@@ -45,7 +45,7 @@ function SmsPage() {
   const save = () => {
     const e = validateSms(draft);
     setErrors(e);
-    if (hasErrors(e)) return toast.error("Please fix the highlighted fields.");
+    if (hasErrors(e)) { toast.error("Please fix the highlighted fields."); return; }
     updateSection("sms", { ...draft, phrase: draft.phrase.trim(), challengeReply: draft.challengeReply.trim() });
     toast.success("SMS trigger saved.");
   };

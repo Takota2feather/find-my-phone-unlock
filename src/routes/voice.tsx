@@ -123,7 +123,7 @@ function VoicePage() {
         <Panel title="Settings" icon={<Mic />}>
           <SettingRow id="voice-on" label="Voice trigger enabled" checked={voice.enabled}
             onChange={(v) => {
-              if (v && !voice.sample) return toast.error("Save a voice sample first.");
+              if (v && !voice.sample) { toast.error("Save a voice sample first."); return; }
               updateSection("voice", { enabled: v });
             }}
             hint={voice.sample ? "Listening happens on your phone, with the Android mic indicator visible." : "Save a voice sample to turn this on."} />
@@ -138,7 +138,7 @@ function VoicePage() {
           </div>
           <div className="pt-5">
             <div className="flex justify-between"><Label>Sensitivity</Label><span className="text-sm font-semibold">{voice.sensitivity}</span></div>
-            <Slider className="mt-3" min={0} max={100} step={5} value={[voice.sensitivity]} onValueChange={([v]) => updateSection("voice", { sensitivity: v })} aria-label="Sensitivity" />
+            <Slider className="mt-3" min={0} max={100} step={5} value={[voice.sensitivity]} onValueChange={([v]) => updateSection("voice", { sensitivity: v ?? voice.sensitivity })} aria-label="Sensitivity" />
             <div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>Fewer false alarms</span><span>Hears you from farther</span></div>
           </div>
           <div className="mt-5"><NativeNote>Background listening needs RECORD_AUDIO plus a microphone-type foreground service with a visible notification.</NativeNote></div>
@@ -199,7 +199,7 @@ function PhraseTester({ phrase }: { phrase: string }) {
     const r = new Ctor();
     r.lang = navigator.language || "en-US";
     r.onresult = (e) => {
-      const t = e.results[0][0].transcript;
+      const t = e.results[0]?.[0]?.transcript ?? "";
       setHeard(t);
       setState(normalizePhrase(t).includes(normalizePhrase(phrase)) ? "match" : "nomatch");
     };
