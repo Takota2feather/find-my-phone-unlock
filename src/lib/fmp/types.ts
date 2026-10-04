@@ -57,8 +57,13 @@ export interface AlertConfig {
   maxDurationSec: number;
 }
 
+export interface DeviceConfig {
+  name: string;
+}
+
 export interface FmpConfig {
   version: 1;
+  device: DeviceConfig;
   setup: SetupConfig;
   sms: SmsConfig;
   voice: VoiceConfig;

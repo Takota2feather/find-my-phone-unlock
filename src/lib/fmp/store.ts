@@ -22,6 +22,7 @@ function merge(saved: Partial<State>): State {
   return {
     config: {
       version: 1,
+      device: { ...DEFAULT_CONFIG.device, ...c.device },
       setup: {
         ...DEFAULT_CONFIG.setup,
         ...c.setup,

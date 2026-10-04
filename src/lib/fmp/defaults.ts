@@ -4,6 +4,7 @@ export const DEFAULT_PHRASE = "find my phone";
 
 export const DEFAULT_CONFIG: FmpConfig = {
   version: 1,
+  device: { name: "My phone" },
   setup: {
     steps: {
       companionInstalled: false,

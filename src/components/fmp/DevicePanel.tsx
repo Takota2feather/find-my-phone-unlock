@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BellRing, Flashlight, FlashlightOff, LockOpen, Square, VolumeX } from "lucide-react";
 import { bridge, useSimState } from "@/lib/fmp/native-bridge";
-import { useConfig } from "@/lib/fmp/store";
+import { useConfig, useEvents } from "@/lib/fmp/store";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "./StatusBadge";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,8 @@ function useTorch(active: boolean, mode: string, interval: number, enabled: bool
 
 export function DevicePanel({ compact = false }: { compact?: boolean }) {
   const sim = useSimState();
-  const { alert } = useConfig();
+  const { alert, device } = useConfig();
+  const last = useEvents()[0];
   const a = sim.alert ?? alert;
   const torch = useTorch(sim.active, a.flashMode, a.blinkIntervalMs, a.flashlightEnabled);
   const alarming = sim.active && a.alarmEnabled;
@@ -35,8 +36,8 @@ export function DevicePanel({ compact = false }: { compact?: boolean }) {
     <div className="rounded-2xl border bg-card p-5">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold">Simulated device</p>
-          <p className="text-xs text-muted-foreground">Preview only — not your real phone</p>
+          <p className="text-sm font-semibold">{device.name}</p>
+          <p className="text-xs text-muted-foreground">Prototype · not linked to your real phone</p>
         </div>
         <StatusBadge tone={sim.active ? "alarm" : "muted"} dot>{sim.active ? "Alerting" : "Idle"}</StatusBadge>
       </div>
@@ -75,6 +76,10 @@ export function DevicePanel({ compact = false }: { compact?: boolean }) {
               {alarming ? <BellRing className="size-4 text-alarm" /> : <VolumeX className="size-4 text-muted-foreground" />}
               {!a.alarmEnabled ? "Disabled" : alarming ? `${a.sound} · ${a.volume}%` : "Silent"}
             </dd>
+          </div>
+          <div className="col-span-2 rounded-xl bg-secondary/60 p-3">
+            <dt className="text-xs text-muted-foreground">Last trigger</dt>
+            <dd className="mt-1 font-semibold">{last ? `${last.source.toUpperCase()} · ${new Date(last.timestamp).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}` : "None yet"}</dd>
           </div>
           {sim.active && (
             <div className="col-span-2 flex flex-wrap gap-2">
