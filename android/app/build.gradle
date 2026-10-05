@@ -18,8 +18,23 @@ android {
         }
     }
     kotlinOptions { jvmTarget = '21' }
+    // Release signing: create android/keystore.properties (see ANDROID.md). Never commit it.
+    def ksFile = rootProject.file("keystore.properties")
+    signingConfigs {
+        if (ksFile.exists()) {
+            def ks = new Properties()
+            ks.load(new FileInputStream(ksFile))
+            release {
+                storeFile file(ks['storeFile'])
+                storePassword ks['storePassword']
+                keyAlias ks['keyAlias']
+                keyPassword ks['keyPassword']
+            }
+        }
+    }
     buildTypes {
         release {
+            if (ksFile.exists()) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
