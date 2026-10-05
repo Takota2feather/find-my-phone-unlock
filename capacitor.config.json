@@ -1,0 +1,7 @@
+{
+  "appId": "app.findmyphone.guard",
+  "appName": "FindMyPhone",
+  "webDir": "native-shell",
+  "server": { "url": "https://find-my-phone-unlcok.lovable.app", "cleartext": false, "androidScheme": "https" },
+  "android": { "allowMixedContent": false }
+}
